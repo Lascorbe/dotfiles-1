@@ -6,9 +6,21 @@ ZSH_THEME="wedisagree"
 alias sourcez="slime ~/.zshrc"
 alias rm="rm -r"
 
+alias energy="cd ~/spiel/ios/energy;git status"
+
 plugins=(git ruby github osx)
 
 source $ZSH/oh-my-zsh.sh
+for file in ~/dotfiles/.{exports,aliases,functions}; do
+	[ -r "$file" ] && source "$file"
+done
+
+GIT_AUTHOR_NAME="Orta Therox"
+GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+git config --global user.name "$GIT_AUTHOR_NAME"
+GIT_AUTHOR_EMAIL="orta.therox@gmail.com"
+GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+git config --global user.email "$GIT_AUTHOR_EMAIL"
 
 # Customize to your needs...
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:/usr/local/sbin/
