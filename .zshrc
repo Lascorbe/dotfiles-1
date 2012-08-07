@@ -3,10 +3,18 @@ ZSH=$HOME/.oh-my-zsh
 
 ZSH_THEME="wedisagree"
 
-alias sourcez="slime ~/.zshrc"
+alias sourcez="source ~/.zshrc"
+alias matez="slime ~/.zshrc"
 alias rm="rm -r"
 
+alias gitrm='git ls-files --deleted -z | xargs -0 git rm'
+alias push='git push origin $(current_branch)'
+alias pr='open "https://github.com/orta/energy/pull/new/artsy:dev...$(current_branch)"'
+
 alias energy="cd ~/spiel/ios/energy;git status"
+alias puttio="cd ~/spiel/ios/puttio;git status"
+
+alias startredis="redis-server /usr/local/etc/redis.conf"
 
 plugins=(git ruby github osx)
 
@@ -23,15 +31,18 @@ GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
 
 # Customize to your needs...
-export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:/usr/local/sbin/
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/usr/local/git/bin:/usr/local/sbin
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+# make hub be git
+eval "$(hub alias -s)"
 
 tab(){
 	osascript -e "
 	tell application \"System Events\"
 		tell process \"iTerm\"
-			click menu item \"Split Vertically With Same Profile\" of menu 1 of menu bar item \"Shell\" of menu bar 1
+			click menu item \"Split Vertically With Current Profile\" of menu 1 of menu bar item \"Shell\" of menu bar 1
 		end tell
 	end tell
 
@@ -67,3 +78,20 @@ gitac(){
 	 git add .
 	 git commit -m "$1"	
 }
+
+branch(){
+	git branch --track "$1"
+	git checkout "$1"
+}
+
+closebranch(){
+	OldBranch=$(current_branch)
+	git checkout dev
+	git merge $OldBranch
+	git branch -D $OldBranch
+}
+
+export EDITOR="slime -w"
+export GEM_EDITOR="slime"
+export PATH=/usr/local/rvm/bin:$PATH
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
